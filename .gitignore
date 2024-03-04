@@ -1,3 +1,9 @@
+### Custom
+build
+CMakeLists.txt.*
+test_*.c
+
+### Template entries
 # Prerequisites
 *.d
 

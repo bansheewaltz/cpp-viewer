@@ -1,0 +1,24 @@
+#include "owviewer.h"
+#include "cglm/cglm.h"
+
+
+#suite parsing
+#test normal
+  const char* path = "/Users/mark/Downloads/3Dmodels/Lion.obj";
+  OWV_Mesh *m =  owv_mesh_read_obj(path);
+  ck_assert(m);
+
+  owv_mesh_destroy(m);
+
+
+#test empty_path
+  OWV_Mesh *m =  owv_mesh_read_obj("");
+
+
+#test no_file
+  OWV_Mesh *m =  owv_mesh_read_obj("a");
+
+
+#test stack_allocated_cube
+  OWV_Mesh *m =  owv_mesh_create_cube(1,2,3,1);
+  ck_assert(m);

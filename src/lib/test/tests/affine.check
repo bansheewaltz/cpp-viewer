@@ -1,0 +1,59 @@
+#include "owviewer.h"
+#include "cglm/cglm.h"
+
+#suite integration
+#test one
+  const float maxlen = 2;
+  const float divid = 2;
+  const float xcen = 1, ycen = 2, zcen = 3;
+  const float rotx = 30, roty = 45, rotz = 60;
+  const float crotx = 30, croty = 45, rcotz = 60;
+  const float trnsx = 1, trnsy = 2, trnsz = 3;
+  const float scalex = 1.1, scaley = 1.2, scalez = 1.3, scaleu = 0.5;
+  
+  mat4 nm = OWVM_IDENTITY_INIT;
+  owvm_scale(nm, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
+  owvm_translate(nm, (vec3){-xcen, -ycen, -zcen});
+
+  mat4 nm2 = GLM_MAT4_IDENTITY_INIT;
+  glm_scale(nm2, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
+  glm_translate(nm2, (vec3){-xcen, -ycen, -zcen});
+
+  mat4 transform = OWVM_IDENTITY_INIT;
+  mat4 transform2 = GLM_MAT4_IDENTITY_INIT;
+  
+  owvm_rotate_x(transform, crotx, transform);
+  glm_rotate_x(transform2, glm_rad(crotx), transform2);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "rotx");
+  
+  owvm_rotate_y(transform, croty, transform);
+  glm_rotate_y(transform2, glm_rad(croty), transform2);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "roty");
+  
+  owvm_translate(transform, (vec3){trnsx, trnsy, trnsz});
+  glm_translate(transform2, (vec3){trnsx, trnsy, trnsz});
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "tr");
+
+  owvm_rotate_x(transform, rotx, transform);
+  glm_rotate_x(transform2, glm_rad(rotx), transform2);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "rotx");
+
+  owvm_rotate_y(transform, roty, transform);
+  glm_rotate_y(transform2, glm_rad(roty), transform2);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "roty");
+
+  owvm_rotate_z(transform, rotz, transform);
+  glm_rotate_z(transform2, glm_rad(rotz), transform2);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "rotz");
+  
+  owvm_scale_uni(transform, scaleu);
+  glm_scale_uni(transform2, scaleu);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "uni");
+  
+  owvm_scale(transform, (vec3){scalex, scaley, scalez});
+  glm_scale(transform2, (vec3){scalex, scaley, scalez});
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i] && "scale");
+  
+  owvm_mul(transform, nm, transform);
+  glm_mul(transform2, nm2, transform2);
+  for (int i = 0; i < 16; i++) ck_assert(((float*)transform)[i] == ((float*)transform2)[i]);

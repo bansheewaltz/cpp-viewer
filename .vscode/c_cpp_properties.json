@@ -1,0 +1,13 @@
+{
+  "configurations": [
+    {
+      "includePath": [
+        "${workspaceFolder}/src/lib/include",
+        "${workspaceFolder}/src/lib/src",
+        "${workspaceFolder}/src/app/view",
+        "${workspaceFolder}/src/lib/extern/googletest/googletest/include"
+      ]
+    }
+  ],
+  "version": 4
+}
