@@ -8,7 +8,9 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 
-#include "owviewer.h"
+#include "model/affine_transformations.h"
+#include "model/parsing.h"
+#include "model/processing.h"
 
 enum LineStyle { SOLID, DASHED };
 enum PointStyle { CIRCLE, SQUARE };

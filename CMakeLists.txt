@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.21.1)
 
-# set(CMAKE_C_COMPILER gcc)
 project(3dviewer VERSION 2.0 LANGUAGES C CXX)
 
 option(ENABLE_DOCS "Build documenation" OFF)
@@ -8,17 +7,19 @@ option(ENABLE_TESTING "Enable testing" OFF)
 option(ENABLE_COVERAGE "Enable code coverage" OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_C_EXTENSIONS OFF)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cmake/updateSubmodules.cmake)
 
-add_subdirectory(extern/gifimage)
-add_subdirectory(src/lib)
-add_subdirectory(src/app)
-target_include_directories(${PROJECT_NAME} PRIVATE extern)
+add_subdirectory(src)
 
 # Target uninstall
 if(NOT TARGET uninstall)
@@ -32,7 +33,7 @@ endif()
 
 # Target dist
 include(InstallRequiredSystemLibraries)
-set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-v1.0-Source")
-set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v1.0-${CMAKE_BUILD_TYPE}-${CMAKE_SYSTEM_NAME}")
+set(CPACK_SOURCE_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${PROJECT_VERSION}-Source")
+set(CPACK_PACKAGE_FILE_NAME "${PROJECT_NAME}-v${PROJECT_VERSION}-${CMAKE_BUILD_TYPE}-${CMAKE_SYSTEM_NAME}")
 set(CPACK_SOURCE_GENERATOR "TGZ")
 include(CPack)

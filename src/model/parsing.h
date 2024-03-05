@@ -1,8 +1,7 @@
-#ifndef OWVIEWER_H_
-#define OWVIEWER_H_
+#ifndef PARSING_H_
+#define PARSING_H_
 
 #include <stdbool.h>
-#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,28 +29,8 @@ void owv_mesh_destroy(OWV_Mesh* mesh);
 // Mesh example
 OWV_Mesh* owv_mesh_create_cube(float x, float y, float z, float side_len);
 
-/* Processing of geometry data */
-
-typedef struct {
-  float xmin, ymin, zmin;
-  float xmax, ymax, zmax;
-  float xcen, ycen, zcen;
-  float xlen, ylen, zlen;
-  float maxlen;
-} OWV_MeshBounds;
-
-OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh);
-
-unsigned int* owv_iarr_to_lines(const OWV_Mesh* m);
-unsigned int* owv_iarr_to_unique_lines(const OWV_Mesh* m, size_t* newlen);
-unsigned int** owv_iarr_to_2d_iarr(const OWV_Mesh* m);
-
-/* Affine transformations */
-
-#include "owviewer/affine.h"
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // OWVIEWER_H_
+#endif  // PARSING_H_

@@ -1,8 +1,8 @@
+#include "parsing.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "owviewer.h"
 
 #define BUFFER_SIZE (1 << 16)
 

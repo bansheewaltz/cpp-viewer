@@ -1,6 +1,4 @@
-#include "owviewer.h"
-#include "owviewer/details.h"
-
+#include "processing.h"
 
 #suite processing
 #test processing

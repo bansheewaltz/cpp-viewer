@@ -1,0 +1,51 @@
+find_package(Qt6 REQUIRED COMPONENTS OpenGLWidgets)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+file(GLOB forms CONFIGURE_DEPENDS "view/forms/*")
+file(GLOB sources CONFIGURE_DEPENDS
+    "view/*.*"
+    "model/*.*"
+    "controller/*.*"
+)
+
+if(ENABLE_TESTING)
+    add_subdirectory(model/test)
+endif()
+
+add_subdirectory(view/third_party/gifimage)
+
+set(project_sources
+    ${sources}
+    ${forms}
+    main.cc
+)
+
+qt_wrap_ui(UI_HEADERS ${forms}) # because of custom location
+qt_add_executable(${PROJECT_NAME} ${project_sources})
+
+target_include_directories(${PROJECT_NAME}
+    PRIVATE
+        view
+        view/third_party
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    Qt::Core
+    Qt6::OpenGLWidgets
+    QtGifImage
+)
+
+set_target_properties(${PROJECT_NAME} PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER smartcalc.bansheewaltz
+    MACOSX_BUNDLE ON
+    WIN32_EXECUTABLE ON
+)
+
+install(TARGETS ${PROJECT_NAME}
+    BUNDLE DESTINATION .
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

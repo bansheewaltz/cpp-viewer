@@ -5,7 +5,7 @@
 #include <QWidget>
 #include <iostream>
 
-#include "owviewer.h"
+#include "model/processing.h"
 
 #define VIEWCUBE_SIDE 2.0f
 

@@ -68,3 +68,6 @@ test: configure
 gcov_report: configure
 	cmake --build $(BUILD_DIR) --target coverage
 .PHONY: gcov_report
+
+# 3d models to test
+#https://disk.yandex.ru/d/YQAcTTckhij16w

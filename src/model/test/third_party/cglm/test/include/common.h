@@ -24,13 +24,12 @@
 #  define CGLM_CLIPSPACE_INCLUDE_ALL
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
+#include <cglm/call.h>
 #include <cglm/cglm.h>
 #include <cglm/struct.h>
-#include <cglm/call.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct test_status_t {
   const char *msg;

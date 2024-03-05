@@ -1,9 +1,12 @@
 find_package(Check REQUIRED)
 find_program(CHECKMK checkmk)
 
+add_subdirectory(third_party/cglm/)
+add_subdirectory(third_party/fast_obj/)
+
 file(GLOB SUITES_CHECK
     CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_LIST_DIR}/*.check
+    ${CMAKE_CURRENT_LIST_DIR}/tests/*.check
 )
 
 set(SUITES_EXE)
@@ -20,8 +23,9 @@ foreach(suite_check ${SUITES_CHECK})
   )
   add_executable(${suite_name} ${suite_c})
   list(APPEND SUITES_EXE ${suite_name})
-  target_link_libraries(${suite_name} ${PROJECT_NAME} check)
-  target_include_directories(${suite_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/cglm/include)
+  target_link_libraries(${suite_name} ${PROJECT_NAME} check fastobj cglm)
+  # target_include_directories(${suite_name} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/third_party/cglm/include
+  #                                                  ${CMAKE_CURRENT_SOURCE_DIR}/third_party/fast_obj)
   add_test(${suite_name} ${suite_name})
 endforeach()
 

@@ -9,7 +9,7 @@ namespace fs = std::filesystem;
 
 /* Reference parser */
 #define FAST_OBJ_IMPLEMENTATION
-#include "fast_obj/fast_obj.h"
+#include "fast_obj.h"
 /* Custom parser */
 #include "owviewer.h"
 #include "owviewer/details.h"
