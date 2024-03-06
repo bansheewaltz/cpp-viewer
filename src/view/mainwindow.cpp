@@ -73,128 +73,6 @@ void MainWindow::resetSettings() {
   ui->uScaleSB->setValue(1);
 }
 
-void MainWindow::saveSettings(QString file_name) {
-  QSettings settings("settings.conf", QSettings::IniFormat);
-  if (file_name != nullptr) {
-    settings.beginGroup("Filename");
-    settings.setValue("model", file_name);
-    settings.endGroup();
-  }
-  settings.beginGroup("MainWindow");
-  settings.setValue("geometry", saveGeometry());
-  settings.endGroup();
-  settings.beginGroup("DrawSettings");
-  settings.setValue("BackgroundColor", ui->viewport->getBackgroundColor());
-  settings.setValue("DrawLines", ui->displayLinesCB->checkState());
-  settings.setValue("DashedLines", ui->lineStyleDashedCB->checkState());
-  settings.setValue("LinesColor", ui->viewport->getLineColor());
-  settings.setValue("LinesWidth", ui->lineWidthSB->value());
-  settings.setValue("DrawPoints", ui->displayPointsCB->checkState());
-  settings.setValue("PointsType", ui->pointStyleSquareCB->checkState());
-  settings.setValue("PointsColor", ui->viewport->getPointColor());
-  settings.setValue("PointsSize", ui->pointSizeSB->value());
-  settings.endGroup();
-  settings.beginGroup("CameraProjection");
-  settings.setValue("Perspective", ui->perspectiveProjButton->isChecked());
-  settings.setValue("Orthographic", ui->orthographicProjButton->isChecked());
-  settings.endGroup();
-  settings.beginGroup("Location");
-  settings.setValue("xLocationSB", ui->xLocationSB->value());
-  settings.setValue("yLocationSB", ui->yLocationSB->value());
-  settings.setValue("zLocationSB", ui->zLocationSB->value());
-  settings.endGroup();
-  settings.beginGroup("Rotation");
-  settings.setValue("xRotationSB", ui->xRotationSB->value());
-  settings.setValue("yRotationSB", ui->yRotationSB->value());
-  settings.setValue("zRotationSB", ui->zRotationSB->value());
-  settings.endGroup();
-  settings.beginGroup("Scale");
-  settings.setValue("xScaleSB", ui->xScaleSB->value());
-  settings.setValue("yScaleSB", ui->yScaleSB->value());
-  settings.setValue("zScaleSB", ui->zScaleSB->value());
-  settings.setValue("uScaleSB", ui->uScaleSB->value());
-  settings.endGroup();
-}
-
-void MainWindow::loadSettings() {
-  if (QFile("settings.conf").exists() == false) {
-    resetSettings();
-    return;
-  }
-
-  QSettings settings("settings.conf", QSettings::IniFormat);
-  settings.beginGroup("MainWindow");
-  if (settings.contains("geometry"))
-    restoreGeometry(settings.value("geometry").toByteArray());
-  settings.endGroup();
-  settings.beginGroup("DrawSettings");
-  if (settings.contains("BackgroundColor"))
-    ui->viewport->setBackgroundColor(
-        settings.value("BackgroundColor").value<QColor>());
-  if (settings.contains("DrawLines"))
-    ui->displayLinesCB->setCheckState(
-        settings.value("DrawLines").value<Qt::CheckState>());
-  if (settings.contains("DashedLines"))
-    ui->lineStyleDashedCB->setCheckState(
-        settings.value("DashedLines").value<Qt::CheckState>());
-  if (settings.contains("LinesColor"))
-    ui->viewport->setLineColor(settings.value("LinesColor").value<QColor>());
-  if (settings.contains("LinesWidth"))
-    ui->lineWidthSB->setValue(settings.value("LinesWidth").toDouble());
-  if (settings.contains("DrawPoints"))
-    ui->displayPointsCB->setCheckState(
-        settings.value("DrawPoints").value<Qt::CheckState>());
-  if (settings.contains("PointsType"))
-    ui->pointStyleSquareCB->setCheckState(
-        settings.value("PointsType").value<Qt::CheckState>());
-  if (settings.contains("PointsColor"))
-    ui->viewport->setPointColor(settings.value("PointsColor").value<QColor>());
-  if (settings.contains("PointsSize"))
-    ui->pointSizeSB->setValue(settings.value("PointsSize").toDouble());
-  settings.endGroup();
-  settings.beginGroup("CameraProjection");
-  if (settings.contains("Orthographic"))
-    ui->orthographicProjButton->toggled(
-        settings.value("Orthographic").toBool());
-  if (settings.contains("Perspective"))
-    ui->perspectiveProjButton->toggled(settings.value("Perspective").toBool());
-  settings.endGroup();
-  settings.beginGroup("Location");
-  if (settings.contains("xLocationSB"))
-    ui->xLocationSB->setValue(settings.value("xLocationSB").toDouble());
-  if (settings.contains("yLocationSB"))
-    ui->yLocationSB->setValue(settings.value("yLocationSB").toDouble());
-  if (settings.contains("zLocationSB"))
-    ui->zLocationSB->setValue(settings.value("zLocationSB").toDouble());
-  settings.endGroup();
-  settings.beginGroup("Rotation");
-  if (settings.contains("xRotationSB"))
-    ui->xRotationSB->setValue(settings.value("xRotationSB").toDouble());
-  if (settings.contains("yRotationSB"))
-    ui->yRotationSB->setValue(settings.value("yRotationSB").toDouble());
-  if (settings.contains("zRotationSB"))
-    ui->zRotationSB->setValue(settings.value("zRotationSB").toDouble());
-  settings.endGroup();
-  settings.beginGroup("Scale");
-  if (settings.contains("xScaleSB"))
-    ui->xScaleSB->setValue(settings.value("xScaleSB").toDouble());
-  if (settings.contains("yScaleSB"))
-    ui->yScaleSB->setValue(settings.value("yScaleSB").toDouble());
-  if (settings.contains("zScaleSB"))
-    ui->zScaleSB->setValue(settings.value("zScaleSB").toDouble());
-  if (settings.contains("uScaleSB"))
-    ui->uScaleSB->setValue(settings.value("uScaleSB").toDouble());
-  settings.endGroup();
-  settings.beginGroup("Filename");
-  if (settings.contains("model")) {
-    file_name = settings.value("model").toString();
-    ui->viewport->setFileName(file_name.toStdString());
-    ui->viewport->loadModel();
-    showFileStats();
-  }
-  settings.endGroup();
-}
-
 void MainWindow::showFileStats() {
   QString stats =                                                         //
       file_name.section("/", -1, -1).section(".", 0, 0) + " | " +         //
@@ -525,3 +403,104 @@ void MainWindow::RecordGifFrame() {
     delete gif;
   }
 }
+
+void MainWindow::saveSettings(QString file_name) {
+  QSettings settings("settings.conf", QSettings::IniFormat);
+  if (file_name != nullptr) {
+    settings.beginGroup("Filename");
+    settings.setValue("model", file_name);
+    settings.endGroup();
+  }
+
+  settings.beginGroup("MainWindow");
+  settings.setValue("geometry", saveGeometry());
+  settings.endGroup();
+  settings.beginGroup("DrawSettings");
+  settings.setValue("BackgroundColor", ui->viewport->getBackgroundColor());
+  settings.setValue("DrawLines", ui->displayLinesCB->checkState());
+  settings.setValue("DashedLines", ui->lineStyleDashedCB->checkState());
+  settings.setValue("LinesColor", ui->viewport->getLineColor());
+  settings.setValue("LinesWidth", ui->lineWidthSB->value());
+  settings.setValue("DrawPoints", ui->displayPointsCB->checkState());
+  settings.setValue("PointsType", ui->pointStyleSquareCB->checkState());
+  settings.setValue("PointsColor", ui->viewport->getPointColor());
+  settings.setValue("PointsSize", ui->pointSizeSB->value());
+  settings.endGroup();
+  settings.beginGroup("CameraProjection");
+  settings.setValue("Perspective", ui->perspectiveProjButton->isChecked());
+  settings.setValue("Orthographic", ui->orthographicProjButton->isChecked());
+  settings.endGroup();
+  settings.beginGroup("Location");
+  settings.setValue("xLocationSB", ui->xLocationSB->value());
+  settings.setValue("yLocationSB", ui->yLocationSB->value());
+  settings.setValue("zLocationSB", ui->zLocationSB->value());
+  settings.endGroup();
+  settings.beginGroup("Rotation");
+  settings.setValue("xRotationSB", ui->xRotationSB->value());
+  settings.setValue("yRotationSB", ui->yRotationSB->value());
+  settings.setValue("zRotationSB", ui->zRotationSB->value());
+  settings.endGroup();
+  settings.beginGroup("Scale");
+  settings.setValue("xScaleSB", ui->xScaleSB->value());
+  settings.setValue("yScaleSB", ui->yScaleSB->value());
+  settings.setValue("zScaleSB", ui->zScaleSB->value());
+  settings.setValue("uScaleSB", ui->uScaleSB->value());
+  settings.endGroup();
+}
+
+// clang-format off
+void MainWindow::loadSettings() {
+  if (QFile("settings.conf").exists() == false) {
+    resetSettings();
+    return;
+  }
+  
+  QSettings settings("settings.conf", QSettings::IniFormat);
+  settings.beginGroup("MainWindow");
+  if (settings.contains("geometry"))
+    restoreGeometry(settings.value("geometry").toByteArray());
+  settings.endGroup();
+  settings.beginGroup("DrawSettings");
+  if (settings.contains("BackgroundColor"))
+    ui->viewport->setBackgroundColor(settings.value("BackgroundColor").value<QColor>());
+  if (settings.contains("LinesColor"))
+    ui->viewport->setLineColor(settings.value("LinesColor").value<QColor>());
+  if (settings.contains("PointsColor"))
+    ui->viewport->setPointColor(settings.value("PointsColor").value<QColor>());
+  ui->displayLinesCB->setCheckState(settings.value("DrawLines", 1).value<Qt::CheckState>());
+  ui->lineStyleDashedCB->setCheckState(settings.value("DashedLines", 0).value<Qt::CheckState>());
+  ui->lineWidthSB->setValue(settings.value("LinesWidth", 1).toFloat());
+  ui->displayPointsCB->setCheckState(settings.value("DrawPoints", 1).value<Qt::CheckState>());
+  ui->pointStyleSquareCB->setCheckState(settings.value("PointsType", 0).value<Qt::CheckState>());
+  ui->pointSizeSB->setValue(settings.value("PointsSize", 1).toFloat());
+  settings.endGroup();
+  settings.beginGroup("CameraProjection");
+  ui->orthographicProjButton->toggled(settings.value("Orthographic", 0).toBool());
+  ui->perspectiveProjButton->toggled(settings.value("Perspective", 1).toBool());
+  settings.endGroup();
+  settings.beginGroup("Location");
+  ui->xLocationSB->setValue(settings.value("xLocationSB", 0).toFloat());
+  ui->yLocationSB->setValue(settings.value("yLocationSB", 0).toFloat());
+  ui->zLocationSB->setValue(settings.value("zLocationSB", 0).toFloat());
+  settings.endGroup();
+  settings.beginGroup("Rotation");
+  ui->xRotationSB->setValue(settings.value("xRotationSB", 0).toFloat());
+  ui->yRotationSB->setValue(settings.value("yRotationSB", 0).toFloat());
+  ui->zRotationSB->setValue(settings.value("zRotationSB", 0).toFloat());
+  settings.endGroup();
+  settings.beginGroup("Scale");
+  ui->xScaleSB->setValue(settings.value("xScaleSB", 1).toFloat());
+  ui->yScaleSB->setValue(settings.value("yScaleSB", 1).toFloat());
+  ui->zScaleSB->setValue(settings.value("zScaleSB", 1).toFloat());
+  ui->uScaleSB->setValue(settings.value("uScaleSB", 1).toFloat());
+  settings.endGroup();
+  settings.beginGroup("Filename");
+  if (settings.contains("model")) {
+    file_name = settings.value("model").toString();
+    ui->viewport->setFileName(file_name.toStdString());
+    ui->viewport->loadModel();
+    showFileStats();
+  }
+  settings.endGroup();
+}
+// clang-format on
