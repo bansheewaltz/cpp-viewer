@@ -44,10 +44,15 @@ class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   // translates the model to the world origin and scales to 1x1x1 cube
   mat4 norm_matrix;
   /* Display settings */
-  QColor background_color;
-  QColor line_color;
-  QColor point_color;
+  // color
+  QColor background_color_default = QColor("#EFE5D7");
+  QColor background_color = background_color_default;
+  QColor line_color_default = QColor("#974F4C");
+  QColor line_color = line_color_default;
+  QColor point_color_default = line_color_default;
+  QColor point_color = point_color_default;
   bool line_display_enabled;
+  // display features
   bool point_display_enabled;
   LineStyle line_style;
   PointStyle point_style;

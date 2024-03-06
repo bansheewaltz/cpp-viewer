@@ -18,9 +18,9 @@ void OpenGLWidget::resetSettings() {
   this->mesh = nullptr;
   this->index_array = nullptr;
   /* Colors */
-  setBackgroundColor(QColor("#EFE5D7"));
-  setLineColor(QColor("#974F4C"));
-  setPointColor(getLineColor());
+  setBackgroundColor(background_color_default);
+  setLineColor(line_color_default);
+  setPointColor(point_color_default);
   /* Camera */
   setCameraSpeed(0.2f);
   setCameraRotationX(+30);
