@@ -26,6 +26,7 @@ typedef struct {
 
 OWV_Mesh* owv_mesh_read_obj(const char* path);
 void owv_mesh_destroy(OWV_Mesh* mesh);
+
 // Mesh example
 OWV_Mesh* owv_mesh_create_cube(float x, float y, float z, float side_len);
 

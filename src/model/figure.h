@@ -10,12 +10,12 @@
 class Figure : SceneObject {
  public:
   std::vector<Edge> edges() { return edges_; }
-  bool is_axes_enabled() { return is_axes_enabled_; }
+  bool is_show_axes() { return is_show_axes_; }
   void Transform(const TransformMatrix& m) override { ; }
 
  private:
   std::vector<Edge> edges_;
-  bool is_axes_enabled_ = true;
+  bool is_show_axes_ = true;
 };
 
 #endif  // FIGURE_H_

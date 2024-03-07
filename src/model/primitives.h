@@ -11,7 +11,7 @@ struct _3DPoint {
 class Vertex : SceneObject {
  public:
   _3DPoint position() { return position_; }
-  void Transform(const TransformMatrix &transform) { ; }
+  void Transform(const TransformMatrix &transform) override { ; }
 
  private:
   _3DPoint position_;

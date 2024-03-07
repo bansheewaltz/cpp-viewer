@@ -9,23 +9,9 @@
 
 #define VIEWCUBE_SIDE 2.0f
 
-OpenGLWidget::OpenGLWidget(QWidget *parent) : QOpenGLWidget(parent) {
-  resetSettings();
-}
-OpenGLWidget::~OpenGLWidget() { owv_mesh_destroy((OWV_Mesh *)this->mesh); }
-
-void OpenGLWidget::resetSettings() {
-  this->mesh = nullptr;
-  this->index_array = nullptr;
-  /* Colors */
-  setBackgroundColor(background_color_default);
-  setLineColor(line_color_default);
-  setPointColor(point_color_default);
-  /* Camera */
-  setCameraSpeed(0.2f);
-  setCameraRotationX(+30);
-  setCameraRotationY(+40);
-  setCameraRotationZ(0);
+QtSceneRenderer::QtSceneRenderer(QWidget *parent) : QOpenGLWidget(parent) {}
+QtSceneRenderer::~QtSceneRenderer() {
+  owv_mesh_destroy((OWV_Mesh *)this->mesh);
 }
 
 static void GLClearError() {
@@ -52,7 +38,7 @@ void printMatrix(float *m, bool native) {
 }
 
 /* Set up the rendering context, load shaders and other resources, etc. */
-void OpenGLWidget::initializeGL() {
+void QtSceneRenderer::initializeGL() {
   /* Retrieve OpenGL functions from graphics card's drivers */
   initializeOpenGLFunctions();
   /* Set proper rendering of overlapping elements */
@@ -60,13 +46,13 @@ void OpenGLWidget::initializeGL() {
 }
 
 /* Update the viewport size */
-void OpenGLWidget::resizeGL(int w, int h) {
+void QtSceneRenderer::resizeGL(int w, int h) {
   glViewport(0, 0, w, h);
   this->ar = (float)w / (float)h;
 }
 
 /* Draw the scene */
-void OpenGLWidget::paintGL() {
+void QtSceneRenderer::paintGL() {
   /* Set the background color */
   QColor bc = getBackgroundColor();
   glClearColor(bc.redF(), bc.greenF(), bc.blueF(), bc.alphaF());
@@ -120,9 +106,9 @@ void OpenGLWidget::paintGL() {
     drawObject(mesh);
 }
 
-void OpenGLWidget::drawCubeScene() { drawCube(0, 0, 0, 1); }
+void QtSceneRenderer::drawCubeScene() { drawCube(0, 0, 0, 1); }
 
-void OpenGLWidget::drawObject(const OWV_Mesh *m) {
+void QtSceneRenderer::drawObject(const OWV_Mesh *m) {
   if (!m) return;
 
   /* Set up the buffers */
@@ -139,15 +125,6 @@ void OpenGLWidget::drawObject(const OWV_Mesh *m) {
       glEnable(GL_LINE_STIPPLE);
       glLineStipple(10, 0x3333);
     }
-
-    /* GL_LINE_LOOP glDrawElements in a loop variation */
-    //    const unsigned int *index_offset = &m->indices[0];
-    //    for (unsigned int i = 0; i < m->face_count; i++) {
-    //      glDrawElements(GL_LINE_LOOP, m->face_vertex_counts[i],
-    //      GL_UNSIGNED_INT,
-    //                     index_offset);
-    //      index_offset += m->face_vertex_counts[i];
-    //    }
 
     /* GL_LINE_LOOP glMultiDrawElements variation */
     //    glMultiDrawElements(GL_LINE_LOOP, (GLsizei *)m->face_vertex_counts,
@@ -179,14 +156,14 @@ void OpenGLWidget::drawObject(const OWV_Mesh *m) {
   //  glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void OpenGLWidget::drawCube(float x, float y, float z, float side_len) {
+void QtSceneRenderer::drawCube(float x, float y, float z, float side_len) {
   const OWV_Mesh *m = owv_mesh_create_cube(x, y, z, side_len);
   this->mesh_bounds = {.xcen = 0, .ycen = 0, .zcen = 0, .maxlen = side_len * 2};
   this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
   drawObject(m);
 }
 
-void OpenGLWidget::drawAxes() {
+void QtSceneRenderer::drawAxes() {
   static float fmax = 1000;
   static float fmin = -fmax;
 
@@ -210,45 +187,12 @@ void OpenGLWidget::drawAxes() {
 }
 
 /* Set interactive rotation in the viewport with a mouse */
-void OpenGLWidget::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
-void OpenGLWidget::mouseMoveEvent(QMouseEvent *m) {
+void QtSceneRenderer::mousePressEvent(QMouseEvent *m) { mouse_pos = m->pos(); }
+void QtSceneRenderer::mouseMoveEvent(QMouseEvent *m) {
   camera_rotx += camera_speed * (m->pos().y() - mouse_pos.y());
   camera_roty += camera_speed * (m->pos().x() - mouse_pos.x());
   mouse_pos = m->pos();
   update();
 }
 
-void OpenGLWidget::loadModel() {
-  OWV_Mesh *m = owv_mesh_read_obj(this->file_name.c_str());
-  if (this->mesh) {
-    owv_mesh_destroy((OWV_Mesh *)this->mesh);
-  }
-  this->mesh = m;
-  if (this->index_array) {
-    free(this->index_array);
-    index_count = 0;
-  }
-  this->mesh_bounds = owv_mesh_find_bounds(m);
-
-  /* Break the index array of faces into the index array of UNIQUE lines */
-  this->index_array = owv_iarr_to_unique_lines(m, &this->index_count);
-  this->faces_count = m->face_count;
-  this->vertices_count = m->vertex_count - 1;
-  this->edges_count = this->index_count / 2;
-  /* Break the index array of faces into the array of index arrays by faces */
-  //  owv_index_arr_to_2d_arr(m);
-  /* Break the index array of faces into the index array of lines */
-  //  this->index_array = owv_to_lines_index_arr(m);
-  //  this->index_count = m->index_count * 2;
-
-  /* Create a normalization matrix for the model */
-  const float maxlen = mesh_bounds.maxlen;
-  const float divid = VIEWCUBE_SIDE;
-  mat4 nm = OWVM_IDENTITY_INIT;
-  OWV_MeshBounds &mb = this->mesh_bounds;
-  owvm_scale(nm, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
-  owvm_translate(nm, (vec3){-mb.xcen, -mb.ycen, -mb.zcen});
-  memcpy(this->norm_matrix, nm, sizeof(nm));
-
-  update();
-}
+void QtSceneRenderer::loadModel() { update(); }

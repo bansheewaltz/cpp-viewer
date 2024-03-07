@@ -59,11 +59,12 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::showFileStats() {
-  QString stats =                                                         //
-      file_name.section("/", -1, -1).section(".", 0, 0) + " | " +         //
-      "verts:" + QString::number(ui->viewport->vertices_count) + " | " +  //
-      "faces:" + QString::number(ui->viewport->faces_count) + " | " +     //
-      "edges:" + QString::number(ui->viewport->edges_count);
+  auto file_stats = facade_.get_scene_stats();
+  QString stats =                                                    //
+      filepath_.section("/", -1, -1).section(".", 0, 0) + " | " +    //
+      "verts:" + QString::number(file_stats.vertices_cnt) + " | " +  //
+      "faces:" + QString::number(file_stats.faces_cnt) + " | " +     //
+      "edges:" + QString::number(file_stats.edges_cnt);
   ui->statisticsLabel->setText(stats);
 }
 
@@ -110,115 +111,116 @@ void syncSliderWithSB(DoubleSlider *s, QDoubleSpinBox *sb) {
 
 /* GUI behaviour related signal functions */
 
-void MainWindow::on_backgroundColorPicker_clicked() {
-  QColor prev_color = ui->viewport->getBackgroundColor();
-  QColor color = QColorDialog::getColor(prev_color, this);
-  if (!color.isValid()) return;
-  ui->viewport->setBackgroundColor(color);
-  ui->viewport->update();
-  paintButton(ui->backgroundColorPicker, color);
-}
-void MainWindow::on_lineColorPicker_clicked() {
-  QColor prev_color = ui->viewport->getLineColor();
-  QColor color = QColorDialog::getColor(prev_color, this);
-  if (!color.isValid()) return;
-  ui->viewport->setLineColor(color);
-  ui->viewport->update();
-  paintButton(ui->lineColorPicker, color);
-}
-void MainWindow::on_pointColorPicker_clicked() {
-  QColor prev_color = ui->viewport->getPointColor();
-  QColor color = QColorDialog::getColor(prev_color, this);
-  if (!color.isValid()) return;
-  ui->viewport->setPointColor(color);
-  ui->viewport->update();
-  paintButton(ui->pointColorPicker, color);
-}
+// void MainWindow::on_backgroundColorPicker_clicked() {
+//   QColor prev_color = ui->viewport->getBackgroundColor();
+//   QColor color = QColorDialog::getColor(prev_color, this);
+//   if (!color.isValid()) return;
+//   ui->viewport->setBackgroundColor(color);
+//   ui->viewport->update();
+//   paintButton(ui->backgroundColorPicker, color);
+// }
+// void MainWindow::on_lineColorPicker_clicked() {
+//   QColor prev_color = ui->viewport->getLineColor();
+//   QColor color = QColorDialog::getColor(prev_color, this);
+//   if (!color.isValid()) return;
+//   ui->viewport->setLineColor(color);
+//   ui->viewport->update();
+//   paintButton(ui->lineColorPicker, color);
+// }
+// void MainWindow::on_pointColorPicker_clicked() {
+//   QColor prev_color = ui->viewport->getPointColor();
+//   QColor color = QColorDialog::getColor(prev_color, this);
+//   if (!color.isValid()) return;
+//   ui->viewport->setPointColor(color);
+//   ui->viewport->update();
+//   paintButton(ui->pointColorPicker, color);
+// }
 
-void MainWindow::on_orthographicProjButton_toggled(bool checked) {
-  if (checked) ui->viewport->setProjectionType(ProjectionType::ORTHOGONAL);
-  ui->orthographicProjButton->setChecked(checked);
-  ui->viewport->update();
-}
-void MainWindow::on_perspectiveProjButton_toggled(bool checked) {
-  if (checked) ui->viewport->setProjectionType(ProjectionType::PERSPECTIVE);
-  ui->perspectiveProjButton->setChecked(checked);
-  ui->viewport->update();
-}
+// void MainWindow::on_orthographicProjButton_toggled(bool checked) {
+//   if (checked) ui->viewport->setProjectionType(ProjectionType::ORTHOGONAL);
+//   ui->orthographicProjButton->setChecked(checked);
+//   ui->viewport->update();
+// }
+// void MainWindow::on_perspectiveProjButton_toggled(bool checked) {
+//   if (checked) ui->viewport->setProjectionType(ProjectionType::PERSPECTIVE);
+//   ui->perspectiveProjButton->setChecked(checked);
+//   ui->viewport->update();
+// }
 
-void MainWindow::on_displayLinesCB_toggled(bool checked) {
-  /* Set the state in the viewport */
-  ui->viewport->setLineDisplayEnabled(checked);
-  ui->viewport->update();
-  /* Set the checkbox check state */
-  ui->displayLinesCB->setChecked(checked);
-  /* Disable the settings' frame */
-  setLayoutWidgetsState(ui->lineSettingsLayout, checked);
-  ui->lineStyleDashedCB->setEnabled(checked);
-  /* Update the button color */
-  QColor res_color = ui->viewport->getLineColor();
-  if (checked == false) {
-    res_color = convertColorToGreyscale(res_color);
-  }
-  paintButton(ui->lineColorPicker, res_color);
-}
-void MainWindow::on_displayPointsCB_toggled(bool checked) {
-  /* Set the state in the viewport */
-  ui->viewport->setPointDisplayEnabled(checked);
-  ui->viewport->update();
-  /* Set the checkbox check state */
-  ui->displayPointsCB->setChecked(checked);
-  /* Disable the settings' frame */
-  setLayoutWidgetsState(ui->pointSettingsLayout, checked);
-  ui->pointStyleSquareCB->setEnabled(checked);
-  /* Update the button color */
-  QColor res_color = ui->viewport->getPointColor();
-  if (checked == false) {
-    res_color = convertColorToGreyscale(res_color);
-  }
-  paintButton(ui->pointColorPicker, res_color);
-}
+// void MainWindow::on_displayLinesCB_toggled(bool checked) {
+//   /* Set the state in the viewport */
+//   ui->viewport->setLineDisplayEnabled(checked);
+//   ui->viewport->update();
+//   /* Set the checkbox check state */
+//   ui->displayLinesCB->setChecked(checked);
+//   /* Disable the settings' frame */
+//   setLayoutWidgetsState(ui->lineSettingsLayout, checked);
+//   ui->lineStyleDashedCB->setEnabled(checked);
+//   /* Update the button color */
+//   QColor res_color = ui->viewport->getLineColor();
+//   if (checked == false) {
+//     res_color = convertColorToGreyscale(res_color);
+//   }
+//   paintButton(ui->lineColorPicker, res_color);
+// }
+// void MainWindow::on_displayPointsCB_toggled(bool checked) {
+//   /* Set the state in the viewport */
+//   ui->viewport->setPointDisplayEnabled(checked);
+//   ui->viewport->update();
+//   /* Set the checkbox check state */
+//   ui->displayPointsCB->setChecked(checked);
+//   /* Disable the settings' frame */
+//   setLayoutWidgetsState(ui->pointSettingsLayout, checked);
+//   ui->pointStyleSquareCB->setEnabled(checked);
+//   /* Update the button color */
+//   QColor res_color = ui->viewport->getPointColor();
+//   if (checked == false) {
+//     res_color = convertColorToGreyscale(res_color);
+//   }
+//   paintButton(ui->pointColorPicker, res_color);
+// }
 
-/* Primitives' style related functions */
+// /* Primitives' style related functions */
 
-void MainWindow::on_pointStyleSquareCB_toggled(bool checked) {
-  ui->viewport->setPointStyle(checked == true ? PointStyle::SQUARE
-                                              : PointStyle::CIRCLE);
-  ui->viewport->update();
-}
-void MainWindow::on_lineStyleDashedCB_toggled(bool checked) {
-  ui->viewport->setLineStyle(checked == true ? LineStyle::DASHED
-                                             : LineStyle::SOLID);
-  ui->viewport->update();
-}
+// void MainWindow::on_pointStyleSquareCB_toggled(bool checked) {
+//   ui->viewport->setPointStyle(checked == true ? PointStyle::SQUARE
+//                                               : PointStyle::CIRCLE);
+//   ui->viewport->update();
+// }
+// void MainWindow::on_lineStyleDashedCB_toggled(bool checked) {
+//   ui->viewport->setLineStyle(checked == true ? LineStyle::DASHED
+//                                              : LineStyle::SOLID);
+//   ui->viewport->update();
+// }
 
-/* Primitives' size related functions */
+// /* Primitives' size related functions */
 
-void MainWindow::setupWidthControls(DoubleSlider *s, QDoubleSpinBox *sb) {
-  syncSliderWithSB(s, sb);
-  /* Set up the spinbox */
-  const unsigned int steps_count = ControlSteps::WIDTH;
-  const float sb_limit = 20.0f;
-  const float sb_step = sb_limit / steps_count;
-  sb->setSingleStep(sb_step);
-  sb->setDecimals(1);
-  sb->setMinimum(1.0);
-  sb->setMaximum(+sb_limit);
-  /* Set up the slider */
-  s->setMinimum(10);
-  s->setMaximum(+steps_count);
-  // internally the slider is of int type but emits the signal of type double
-  s->divisor = steps_count / sb_limit;
-  s->setDoubleValue(9.9);  // placeholder value to fix not emitted valueChanged
-}
-void MainWindow::on_lineWidthSlider_doubleValueChanged(double value) {
-  ui->viewport->setLineWidth(value);
-  ui->viewport->update();
-}
-void MainWindow::on_pointSizeSlider_doubleValueChanged(double value) {
-  ui->viewport->setPointSize(value);
-  ui->viewport->update();
-}
+// void MainWindow::setupWidthControls(DoubleSlider *s, QDoubleSpinBox *sb) {
+//   syncSliderWithSB(s, sb);
+//   /* Set up the spinbox */
+//   const unsigned int steps_count = ControlSteps::WIDTH;
+//   const float sb_limit = 20.0f;
+//   const float sb_step = sb_limit / steps_count;
+//   sb->setSingleStep(sb_step);
+//   sb->setDecimals(1);
+//   sb->setMinimum(1.0);
+//   sb->setMaximum(+sb_limit);
+//   /* Set up the slider */
+//   s->setMinimum(10);
+//   s->setMaximum(+steps_count);
+//   // internally the slider is of int type but emits the signal of type double
+//   s->divisor = steps_count / sb_limit;
+//   s->setDoubleValue(9.9);  // placeholder value to fix not emitted
+//   valueChanged
+// }
+// void MainWindow::on_lineWidthSlider_doubleValueChanged(double value) {
+//   ui->viewport->setLineWidth(value);
+//   ui->viewport->update();
+// }
+// void MainWindow::on_pointSizeSlider_doubleValueChanged(double value) {
+//   ui->viewport->setPointSize(value);
+//   ui->viewport->update();
+// }
 
 /* Location related functions */
 
@@ -238,18 +240,18 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   // internally the slider is of int type but emits the signal of type double
   s->setDivisor(steps_count);
 }
-void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
-  ui->viewport->setTranslationX(value);
-  ui->viewport->update();
-}
-void MainWindow::on_yLocationSlider_doubleValueChanged(double value) {
-  ui->viewport->setTranslationY(value);
-  ui->viewport->update();
-}
-void MainWindow::on_zLocationSlider_doubleValueChanged(double value) {
-  ui->viewport->setTranslationZ(value);
-  ui->viewport->update();
-}
+// void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
+//   ui->viewport->setTranslationX(value);
+//   ui->viewport->update();
+// }
+// void MainWindow::on_yLocationSlider_doubleValueChanged(double value) {
+//   ui->viewport->setTranslationY(value);
+//   ui->viewport->update();
+// }
+// void MainWindow::on_zLocationSlider_doubleValueChanged(double value) {
+//   ui->viewport->setTranslationZ(value);
+//   ui->viewport->update();
+// }
 void MainWindow::on_locationResetPushButton_clicked() {
   ui->xLocationSlider->setValue(0);
   ui->yLocationSlider->setValue(0);
@@ -317,11 +319,11 @@ void MainWindow::openFile() {
     return;
   }
 
-  this->file_name = file_name;
-  this->saveSettings(file_name);
+  filepath_ = file_name;
+  saveSettings(file_name);
   // ui->viewport->setFileName(file_name.toStdString());
   // ui->viewport->loadModel();
-  facade_.LoadScene(file_name);
+  facade_.LoadScene(filepath_.toStdString());
   showFileStats();
 }
 
@@ -457,9 +459,8 @@ void MainWindow::loadSettings() {
   settings.endGroup();
   settings.beginGroup("Filename");
   if (settings.contains("model")) {
-    file_name = settings.value("model").toString();
-    ui->viewport->setFileName(file_name.toStdString());
-    ui->viewport->loadModel();
+    filepath_ = settings.value("model").toString();
+    facade_.LoadScene(filepath_.toStdString());
     showFileStats();
   }
   settings.endGroup();

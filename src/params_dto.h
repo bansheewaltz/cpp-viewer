@@ -29,7 +29,7 @@ struct SceneParamsDTO {
   float scalex, scaley, scalez, scaleu;
 };
 
-struct SceneStatsDTO {
+struct FigureStatsDTO {
   std::string filename;
   int vertices_cnt;
   int edges_cnt, edges_unique_cnt;

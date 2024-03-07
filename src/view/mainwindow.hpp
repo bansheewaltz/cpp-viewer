@@ -46,6 +46,7 @@ class MainWindow : public QMainWindow {
   void saveSettings(QString file_name);
   void loadSettings();
   void showFileStats();
+  void get_file_stats();
 
  private slots:
   /* Display settings */
@@ -93,6 +94,7 @@ class MainWindow : public QMainWindow {
   Facade facade_;
   RendererParamsDTO renderer_params_;
   SceneParamsDTO scene_params_;
+  QString filepath_;
 };
 
 #endif  // MAINWINDOW_HPP
