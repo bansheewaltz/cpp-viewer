@@ -1,4 +1,4 @@
-#include "openglwidget.hpp"
+#include "qt_scene_renderer.h"
 
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
@@ -39,15 +39,15 @@ static void GLCheckError() {
 }
 
 void printMatrix(float *m, bool native) {
-  if (native) {
+  if (native)
     qDebug() << "native";
-  } else {
+  else
     qDebug() << "custom";
-  }
+
   qDebug() << "address:" << &(m[0]);
-  for (int i = 0; i < 16; i += 4) {
+  for (int i = 0; i < 16; i += 4)
     qDebug() << m[i] << m[i + 1] << m[i + 2] << m[i + 3];
-  }
+
   qDebug() << "";
 }
 

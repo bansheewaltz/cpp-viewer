@@ -2,9 +2,10 @@
   "configurations": [
     {
       "includePath": [
-        "${workspaceFolder}/src/lib/include",
-        "${workspaceFolder}/src/lib/src",
-        "${workspaceFolder}/src/app/view",
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/src/view",
+        "${workspaceFolder}/src/model",
+        "${workspaceFolder}/src/controller",
         "${workspaceFolder}/src/lib/extern/googletest/googletest/include"
       ]
     }

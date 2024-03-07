@@ -5,11 +5,11 @@ DoubleSlider::DoubleSlider(QWidget *parent) : QSlider(parent) {
 }
 
 void DoubleSlider::setDoubleValue(double value) {
-  int v = std::round(value * divisor);
+  double_value_ = value;
+  int v = std::round(value * divisor_);
   this->setValue(v);
 }
 
 void DoubleSlider::notifyValueChanged(int value) {
-  double doubleValue = (float)value / this->divisor;
-  emit doubleValueChanged(doubleValue);
+  emit doubleValueChanged(double_value_);
 }

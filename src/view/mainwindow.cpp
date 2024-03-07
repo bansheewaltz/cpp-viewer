@@ -36,10 +36,13 @@ MainWindow::MainWindow(QWidget *parent)
   setupScaleControls(ui->uScaleSlider, ui->uScaleSB);
   /* Load settings */
   loadSettings();
-  /* Paint the color picker buttons */
-  paintButton(ui->backgroundColorPicker, ui->viewport->getBackgroundColor());
-  paintButton(ui->lineColorPicker, ui->viewport->getLineColor());
-  paintButton(ui->pointColorPicker, ui->viewport->getPointColor());
+  /* Paint the color picker buttorns */
+  auto bc = renderer_params_.background_color;
+  paintButton(ui->backgroundColorPicker, QColor(bc.r, bc.g, bc.b));
+  auto lc = renderer_params_.line_color;
+  paintButton(ui->lineColorPicker, QColor(lc.r, lc.g, lc.b));
+  auto pc = renderer_params_.point_color;
+  paintButton(ui->pointColorPicker, QColor(pc.r, pc.g, pc.b));
   /* Set up shortcuts */
   new QShortcut(QKeySequence(tr("Ctrl+O")), this, SLOT(openFile()));
   new QShortcut(QKeySequence(tr("L")), ui->xLocationSB, SLOT(setFocus()));
@@ -53,24 +56,6 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow() {
   this->saveSettings(nullptr);
   delete ui;
-}
-
-void MainWindow::resetSettings() {
-  on_perspectiveProjButton_toggled(true);
-  on_displayLinesCB_toggled(true);
-  ui->lineWidthSB->setValue(1.0);
-  on_displayPointsCB_toggled(false);
-  ui->pointSizeSB->setValue(1.0);
-  ui->xLocationSlider->setValue(0);
-  ui->yLocationSlider->setValue(0);
-  ui->zLocationSlider->setValue(0);
-  ui->xRotationSlider->setValue(0);
-  ui->yRotationSlider->setValue(0);
-  ui->zRotationSlider->setValue(0);
-  ui->xScaleSB->setValue(1);
-  ui->yScaleSB->setValue(1);
-  ui->zScaleSB->setValue(1);
-  ui->uScaleSB->setValue(1);
 }
 
 void MainWindow::showFileStats() {
@@ -251,7 +236,7 @@ void MainWindow::setupLocationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   s->setMinimum(-steps_count);
   s->setMaximum(+steps_count);
   // internally the slider is of int type but emits the signal of type double
-  s->divisor = steps_count;
+  s->setDivisor(steps_count);
 }
 void MainWindow::on_xLocationSlider_doubleValueChanged(double value) {
   ui->viewport->setTranslationX(value);
@@ -287,20 +272,9 @@ void MainWindow::setupRotationControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   s->setMinimum(-steps_count);
   s->setMaximum(+steps_count);
   // internally the slider is of int type but emits the signal of type double
-  s->divisor = steps_count / sb_limit;
+  s->setDivisor(steps_count / sb_limit);
 }
-void MainWindow::on_xRotationSlider_doubleValueChanged(double value) {
-  ui->viewport->setRotationX(value);
-  ui->viewport->update();
-}
-void MainWindow::on_yRotationSlider_doubleValueChanged(double value) {
-  ui->viewport->setRotationY(value);
-  ui->viewport->update();
-}
-void MainWindow::on_zRotationSlider_doubleValueChanged(double value) {
-  ui->viewport->setRotationZ(value);
-  ui->viewport->update();
-}
+
 void MainWindow::on_rotationResetPushButton_clicked() {
   ui->xRotationSlider->setValue(0);
   ui->yRotationSlider->setValue(0);
@@ -323,25 +297,10 @@ void MainWindow::setupScaleControls(DoubleSlider *s, QDoubleSpinBox *sb) {
   s->setMinimum(1);
   s->setMaximum(steps_count);
   // internally the slider is of int type but emits the signal of type double
-  s->divisor = steps_count / sb_limit;
+  s->setDivisor(steps_count / sb_limit);
   s->setDoubleValue(1.0f);
 }
-void MainWindow::on_xScaleSlider_doubleValueChanged(double value) {
-  ui->viewport->setScaleX(value);
-  ui->viewport->update();
-}
-void MainWindow::on_yScaleSlider_doubleValueChanged(double value) {
-  ui->viewport->setScaleY(value);
-  ui->viewport->update();
-}
-void MainWindow::on_zScaleSlider_doubleValueChanged(double value) {
-  ui->viewport->setScaleZ(value);
-  ui->viewport->update();
-}
-void MainWindow::on_uScaleSlider_doubleValueChanged(double value) {
-  ui->viewport->setScaleU(value);
-  ui->viewport->update();
-}
+
 void MainWindow::on_scaleResetPushButton_clicked() {
   ui->xScaleSB->setValue(1);
   ui->yScaleSB->setValue(1);
@@ -352,15 +311,17 @@ void MainWindow::on_scaleResetPushButton_clicked() {
 void MainWindow::on_openFilePushButton_released() { MainWindow::openFile(); }
 void MainWindow::openFile() {
   QString dir = QDir::homePath() + "/Downloads/3Dmodels";
-  this->file_name = QFileDialog::getOpenFileName(
+  auto file_name = QFileDialog::getOpenFileName(
       this, "Open 3d model", dir, "geometry definition file (*.obj)");
-  if (this->file_name.isEmpty()) {
+  if (file_name.isEmpty()) {
     return;
   }
 
+  this->file_name = file_name;
   this->saveSettings(file_name);
-  ui->viewport->setFileName(file_name.toStdString());
-  ui->viewport->loadModel();
+  // ui->viewport->setFileName(file_name.toStdString());
+  // ui->viewport->loadModel();
+  facade_.LoadScene(file_name);
   showFileStats();
 }
 
@@ -416,14 +377,14 @@ void MainWindow::saveSettings(QString file_name) {
   settings.setValue("geometry", saveGeometry());
   settings.endGroup();
   settings.beginGroup("DrawSettings");
-  settings.setValue("BackgroundColor", ui->viewport->getBackgroundColor());
+  // settings.setValue("BackgroundColor", ui->viewport->getBackgroundColor());
   settings.setValue("DrawLines", ui->displayLinesCB->checkState());
   settings.setValue("DashedLines", ui->lineStyleDashedCB->checkState());
-  settings.setValue("LinesColor", ui->viewport->getLineColor());
+  // settings.setValue("LinesColor", ui->viewport->getLineColor());
   settings.setValue("LinesWidth", ui->lineWidthSB->value());
   settings.setValue("DrawPoints", ui->displayPointsCB->checkState());
   settings.setValue("PointsType", ui->pointStyleSquareCB->checkState());
-  settings.setValue("PointsColor", ui->viewport->getPointColor());
+  // settings.setValue("PointsColor", ui->viewport->getPointColor());
   settings.setValue("PointsSize", ui->pointSizeSB->value());
   settings.endGroup();
   settings.beginGroup("CameraProjection");
@@ -461,12 +422,12 @@ void MainWindow::loadSettings() {
     restoreGeometry(settings.value("geometry").toByteArray());
   settings.endGroup();
   settings.beginGroup("DrawSettings");
-  if (settings.contains("BackgroundColor"))
-    ui->viewport->setBackgroundColor(settings.value("BackgroundColor").value<QColor>());
-  if (settings.contains("LinesColor"))
-    ui->viewport->setLineColor(settings.value("LinesColor").value<QColor>());
-  if (settings.contains("PointsColor"))
-    ui->viewport->setPointColor(settings.value("PointsColor").value<QColor>());
+  // if (settings.contains("BackgroundColor"))
+  //   ui->viewport->setBackgroundColor(settings.value("BackgroundColor").value<QColor>());
+  // if (settings.contains("LinesColor"))
+  //   ui->viewport->setLineColor(settings.value("LinesColor").value<QColor>());
+  // if (settings.contains("PointsColor"))
+  //   ui->viewport->setPointColor(settings.value("PointsColor").value<QColor>());
   ui->displayLinesCB->setCheckState(settings.value("DrawLines", 1).value<Qt::CheckState>());
   ui->lineStyleDashedCB->setCheckState(settings.value("DashedLines", 0).value<Qt::CheckState>());
   ui->lineWidthSB->setValue(settings.value("LinesWidth", 1).toFloat());

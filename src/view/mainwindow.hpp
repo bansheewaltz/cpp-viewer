@@ -8,7 +8,9 @@
 #include <QTimer>
 
 #include "doubleslider.hpp"
+#include "facade.h"
 #include "gifimage/qgifimage.h"
+#include "params_dto.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -46,40 +48,51 @@ class MainWindow : public QMainWindow {
   void showFileStats();
 
  private slots:
-  /* Display */
+  /* Display settings */
   void on_backgroundColorPicker_clicked();
+  /* * Lines */
+  void on_displayLinesCB_released();
   void on_lineColorPicker_clicked();
+  void on_lineWidthSlider_doubleValueReleased();
+  void on_lineStyleDashedCB_released();
+  /* * Points */
+  void on_displayPointsCB_released();
   void on_pointColorPicker_clicked();
-  void on_displayLinesCB_toggled(bool checked);
-  void on_displayPointsCB_toggled(bool checked);
-  void on_pointSizeSlider_doubleValueChanged(double value);
-  void on_pointStyleSquareCB_toggled(bool checked);
-  void on_lineWidthSlider_doubleValueChanged(double value);
-  void on_lineStyleDashedCB_toggled(bool checked);
-  void on_orthographicProjButton_toggled(bool checked);
-  void on_perspectiveProjButton_toggled(bool checked);
-  /* Location */
-  void on_xLocationSlider_doubleValueChanged(double value);
-  void on_yLocationSlider_doubleValueChanged(double value);
-  void on_zLocationSlider_doubleValueChanged(double value);
+  void on_pointSizeSlider_doubleValueReleased();
+  void on_pointStyleSquareCB_released();
+
+  /* Transformations */
+  /* * Projection */
+  void on_orthographicProjButton_released();
+  void on_perspectiveProjButton_released();
+  /* * Location */
+  void on_xLocationSlider_doubleValueReleased();
+  void on_yLocationSlider_doubleValueReleased();
+  void on_zLocationSlider_doubleValueReleased();
   void on_locationResetPushButton_clicked();
-  /* Rotation */
-  void on_xRotationSlider_doubleValueChanged(double angle);
-  void on_yRotationSlider_doubleValueChanged(double angle);
-  void on_zRotationSlider_doubleValueChanged(double angle);
+  /* * Rotation */
+  void on_xRotationSlider_doubleValueReleased();
+  void on_yRotationSlider_doubleValueReleased();
+  void on_zRotationSlider_doubleValueReleased();
   void on_rotationResetPushButton_clicked();
-  /* Scale */
-  void on_xScaleSlider_doubleValueChanged(double factor);
-  void on_yScaleSlider_doubleValueChanged(double factor);
-  void on_zScaleSlider_doubleValueChanged(double factor);
-  void on_uScaleSlider_doubleValueChanged(double factor);
+  /* * Scale */
+  void on_xScaleSlider_doubleValueReleased();
+  void on_yScaleSlider_doubleValueReleased();
+  void on_zScaleSlider_doubleValueReleased();
+  void on_uScaleSlider_doubleValueReleased();
   void on_scaleResetPushButton_clicked();
+
   /* Actions */
   void on_openFilePushButton_released();
   void openFile();
   void on_gifCapturePushButton_released();
   void RecordGifFrame();
   void on_screenshotPushButton_released();
+
+ private:
+  Facade facade_;
+  RendererParamsDTO renderer_params_;
+  SceneParamsDTO scene_params_;
 };
 
 #endif  // MAINWINDOW_HPP

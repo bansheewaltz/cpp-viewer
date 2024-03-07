@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>750</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -58,7 +58,7 @@
      <number>6</number>
     </property>
     <item>
-     <widget class="OpenGLWidget" name="viewport">
+     <widget class="QtSceneRenderer" name="viewport">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -1154,9 +1154,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>OpenGLWidget</class>
+   <class>QtSceneRenderer</class>
    <extends>QOpenGLWidget</extends>
-   <header>openglwidget.hpp</header>
+   <header>scene_renderer/qt_scene_renderer.h</header>
   </customwidget>
   <customwidget>
    <class>DoubleSlider</class>

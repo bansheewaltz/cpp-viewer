@@ -3,7 +3,7 @@
 #include <float.h>
 #include <stdlib.h>
 
-#include "parsing.h"
+#include "file_reader/lowlevel_file_reader.h"
 
 OWV_MeshBounds owv_mesh_find_bounds(const OWV_Mesh* mesh) {
   float xmax = FLT_MIN, ymax = FLT_MIN, zmax = FLT_MIN;

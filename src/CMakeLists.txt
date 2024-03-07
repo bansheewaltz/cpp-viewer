@@ -5,8 +5,10 @@ set(CMAKE_AUTORCC ON)
 
 file(GLOB forms CONFIGURE_DEPENDS "view/forms/*")
 file(GLOB sources CONFIGURE_DEPENDS
+    "./*.cc" "./*.h"
     "view/*.*"
     "model/*.*"
+    "model/*/*.*"
     "controller/*.*"
 )
 
@@ -19,7 +21,6 @@ add_subdirectory(view/third_party/gifimage)
 set(project_sources
     ${sources}
     ${forms}
-    main.cc
 )
 
 qt_wrap_ui(UI_HEADERS ${forms}) # because of custom location
@@ -27,6 +28,8 @@ qt_add_executable(${PROJECT_NAME} ${project_sources})
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
+        controller
+        model
         view
         view/third_party
         ${CMAKE_CURRENT_SOURCE_DIR}
