@@ -5,8 +5,8 @@
 
 #include "transform_matrix.h"
 
-class TransformMatrixBuilder {
-  static TransformMatrix CreateRotationMatrix(float x, float y, float z) {
+struct TransformMatrixBuilder {
+  static TransformMatrix CreateRotationMatrix(float x, float y, float z = 0) {
     TransformMatrix matx;
     float cosx = cosf(to_rad(x));
     float sinx = sinf(to_rad(x));
@@ -44,16 +44,18 @@ class TransformMatrixBuilder {
     return res;
   }
 
-  static TransformMatrix CreateScaleMatrix(float x, float y, float z) {
+  static TransformMatrix CreateScaleMatrix(float x, float y, float z,
+                                           float u = 1) {
     TransformMatrix res;
     for (int i = 0; i < 4; i++) {
-      res[0][i] *= x;
-      res[1][i] *= y;
-      res[2][i] *= z;
+      res[0][i] *= x * u;
+      res[1][i] *= y * u;
+      res[2][i] *= z * u;
     }
     return res;
   }
 
+ private:
   static inline double to_rad(double deg) { return deg * (M_PI / 180); }
 };
 

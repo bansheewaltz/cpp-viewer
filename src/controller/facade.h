@@ -1,8 +1,8 @@
 #ifndef FACADE_H_
 #define FACADE_H_
 
+#include "dtos.h"
 #include "file_reader/file_reader_base.h"
-#include "params_dto.h"
 #include "scene.h"
 #include "scene_renderer/scene_renderer_base.h"
 
@@ -12,12 +12,14 @@ class Facade {
     scene_ = file_reader_->ReadScene(filepath);
   }
   void DrawScene() { scene_renderer_->DrawScene(&scene_); }
-  void SetSceneParams(SceneParamsDTO params) { scene_.set_params(params); }
+  void TransformScene(SceneTransformsDTO transforms) {
+    scene_.TransformScene(transforms);
+  }
   void SetRendererParams(RendererParamsDTO params) {
     scene_renderer_->set_params(params);
   }
 
-  FigureStatsDTO get_scene_stats() { scene_.get; }
+  FigureStatsDTO scene_stats() { return scene_.stats(); }
 
  private:
   FileReaderBase* file_reader_;

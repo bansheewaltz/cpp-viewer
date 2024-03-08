@@ -9,13 +9,14 @@ class TransformMatrix {
 
     for (int i = 0; i < 4; i++)
       for (int j = 0; j < 4; j++)
-        for (int k = 0; k < 4; k++)
-          res.data_[i][j] += m1.data_[i][k] * m2.data_[k][j];
+        for (int k = 0; k < 3 + (i == 3); k++)
+          res.data_[i][j] += m1.data_[k][j] * m2.data_[i][k];
 
     return res;
   }
 
   float* operator[](int row) { return data_[row]; }
+  float* data() { return (float*)data_; }
 
  private:
   float data_[4][4] = {{1.0f, 0.0f, 0.0f, 0.0f},  // identitiy matrix

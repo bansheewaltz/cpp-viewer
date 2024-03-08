@@ -3,7 +3,7 @@ BUILD_TYPE  ?= Debug
 BUILD_DIR   ?= $(BIN_DIR)/$(BUILD_TYPE)
 INSTALL_DIR ?= installation
 
-all: build
+all: configure build test gcov_report install
 .PHONY: all
 
 configure:
@@ -14,11 +14,6 @@ release: BUILD_TYPE = release
 build release debug: configure	
 	cmake --build $(BUILD_DIR) --parallel -- --output-sync
 .PHONY: build release debug
-
-# verbose build
-buildv: configure
-	VERBOSE=1 cmake --build $(BUILD_DIR)
-.PHONY: buildv
 
 LINTFLAGS := --style=google
 lint:     LINTFLAGS += -n

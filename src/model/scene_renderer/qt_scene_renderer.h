@@ -10,9 +10,9 @@
 
 #include "scene_renderer/scene_renderer_base.h"
 
-class QtSceneRenderer : public SceneRendererBase,
-                        public QOpenGLWidget,
-                        protected QOpenGLFunctions {
+class QtSceneRenderer : public QOpenGLWidget,
+                        protected QOpenGLFunctions,
+                        public SceneRendererBase {
   Q_OBJECT
 
  public:
@@ -25,22 +25,26 @@ class QtSceneRenderer : public SceneRendererBase,
   void resizeGL(int w, int h) override;
   void paintGL() override;
   /* Helpers */
-  virtual void drawAxes();
-  virtual void drawFigure(const Figure *figure);
-  virtual void drawScene(const Scene *scene);
-  virtual void drawCube(float, float, float, float);
+  void DrawScene(Scene *scene) override {
+    scene_ = scene;
+    paintGL();
+  }
+  void drawFigure(Figure figure);
+  void drawAxes();
+  // void drawCube(float, float, float, float);
+  // void drawCubeScene();
 
-  void drawCubeScene();
   /* Events */
   void mousePressEvent(QMouseEvent *) override;
   void mouseMoveEvent(QMouseEvent *) override;
 
  private:
-  float viewport_default_scale = 0.7;
+  float view_default_scale_ = 0.7;
+  float ar_;  // aspect ratio
   /* Camera control */
-  float camera_speed;
-  QPoint mouse_pos;
-  float camera_rotx, camera_roty, camera_rotz;
+  QPoint mouse_pos_;
+  float cam_speed_ = 0.2;
+  float cam_rotx_ = 30, cam_roty_ = 30, cam_rotz_;
 };
 
 #endif  // QT_SCENE_RENDERER_H_

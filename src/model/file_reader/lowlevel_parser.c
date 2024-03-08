@@ -1,4 +1,4 @@
-#include "file_reader/lowlevel_file_reader.h"
+#include "lowlevel_parser.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -290,38 +290,4 @@ void owv_mesh_destroy(OWV_Mesh* m) {
   array_clean(m->face_vertex_counts);
   array_clean(m->indices);
   free(m);
-}
-
-OWV_Mesh* owv_mesh_create_cube(float x, float y, float z, float side_len) {
-  const float hside = side_len / 2;
-  static const unsigned int vertex_count = 8;
-  static float positions[24];
-  const float instance_positions[24] = {
-      x + hside, y - hside, z + hside,  // right bottom front
-      x + hside, y - hside, z - hside,  // right bottom back
-      x - hside, y - hside, z + hside,  // left bottom front
-      x - hside, y - hside, z - hside,  // left bottom back
-
-      x + hside, y + hside, z + hside,  // right top front
-      x + hside, y + hside, z - hside,  // right top back
-      x - hside, y + hside, z + hside,  // left top front
-      x - hside, y + hside, z - hside,  // left top back
-  };
-  memcpy(positions, instance_positions, sizeof(float) * 24);
-  static const unsigned int face_count = 6;
-  static const unsigned int face_vertex_counts[] = {4, 4, 4, 4, 4, 4};
-  static const unsigned int index_count = 24;
-  static const unsigned int indices[] = {3, 2, 0, 1,   // bottom
-                                         4, 5, 7, 6,   // top
-                                         2, 3, 7, 6,   // left
-                                         0, 1, 5, 4,   // right
-                                         0, 4, 6, 2,   // near
-                                         1, 3, 7, 5};  // far
-
-  OWV_Mesh* m = (OWV_Mesh*)malloc(sizeof(OWV_Mesh));
-  if (!m) return 0;
-  *m = (OWV_Mesh){vertex_count, positions,
-                  face_count,   (unsigned int*)face_vertex_counts,
-                  index_count,  (unsigned int*)indices};
-  return m;
 }

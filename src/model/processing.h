@@ -3,7 +3,7 @@
 
 #include <stddef.h>
 
-#include "file_reader/lowlevel_file_reader.h"
+#include "file_reader/lowlevel_parser.h"
 
 #ifdef __cplusplus
 extern "C" {
