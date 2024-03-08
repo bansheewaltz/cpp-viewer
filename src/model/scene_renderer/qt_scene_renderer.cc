@@ -3,37 +3,15 @@
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
 #include <QWidget>
-#include <csignal>
-#include <iostream>
 
+#include "opengl_helpers.h"
 #include "transform_matrix_builder.h"
-
-#define ASSERT(x) \
-  if (!(x)) ::raise(SIGTRAP);
-#define GLCall(x) \
-  GLClearError(); \
-  x;              \
-  ASSERT(GLLogCall(#x, __FILE__, __LINE__))
 
 QtSceneRenderer::QtSceneRenderer(QWidget *parent) : QOpenGLWidget(parent) {
   scene_ = new Scene;
   scene_->AddFigure(Figure::CreateCube(0, 0, 0, 0.5));
 }
 QtSceneRenderer::~QtSceneRenderer() {}
-
-static void GLClearError() {
-  while (glGetError() != GL_NO_ERROR)
-    ;
-}
-static bool GLLogCall(const char *function, const char *file, int line) {
-  while (GLenum error = glGetError()) {
-    std::cout << "OpenGL error: " << std::hex << error << std::dec << "\n"  //
-              << "call: " << function << "\n"
-              << "at: " << file << ":" << line << std::endl;
-    return false;
-  }
-  return true;
-}
 
 // void printMatrix(float *m, bool native) {
 //   if (native)
@@ -89,9 +67,9 @@ void QtSceneRenderer::paintGL() {
   auto view_rotate =
       TransformMatrixBuilder::CreateRotationMatrix(cam_rotx_, cam_roty_);
   if (params_.is_show_axes) {
-    glRotatef(cam_rotx_, 1, 0, 0);
-    glRotatef(cam_roty_, 0, 1, 0);
-    // glLoadMatrixf(view_rotate.data());
+    // glRotatef(cam_rotx_, 1, 0, 0);
+    // glRotatef(cam_roty_, 0, 1, 0);
+    glLoadMatrixf(view_rotate.data());
     drawAxes();
   }
   // auto transform = view_rotate * scene_->transform_matrix();
