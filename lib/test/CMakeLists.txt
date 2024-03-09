@@ -39,6 +39,13 @@ endif()
 
 find_program(GCOVR_COMMAND gcovr)
 
+# message(fuck ${CMAKE_CXX_COMPILER_ID})
+if(CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  set(GCOV_EXE "/Library/Developer/CommandLineTools/usr/bin/llvm-cov gcov")
+else()
+  set(GCOV_EXE "gcov")
+endif()
+
 if(GCOVR_COMMAND)
   set(COVERAGE_DIR ${PROJECT_BINARY_DIR}/coverage)
   target_compile_options(${TEST_EXE} PRIVATE --coverage)
@@ -47,7 +54,7 @@ if(GCOVR_COMMAND)
   # target_link_libraries(${PROJECT_NAME} INTERFACE gcov)
   add_custom_target(coverage
     COMMAND ${GCOVR_COMMAND}
-    --gcov-executable "/Library/Developer/CommandLineTools/usr/bin/llvm-cov gcov"
+    --gcov-executable ${GCOV_EXE}
     --txt
     --html-details=${COVERAGE_DIR}/report.html
     --html-self-contained

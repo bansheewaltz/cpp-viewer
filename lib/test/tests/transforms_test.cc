@@ -18,8 +18,10 @@ TEST(MatrixTransformTest, SeriesOfTransformation) {
       nm * TransformMatrixBuilder::CreateTranslationMatrix(-xcen, -ycen, -zcen);
 
   mat4 nm2 = GLM_MAT4_IDENTITY_INIT;
-  glm_scale(nm2, (vec3){divid / maxlen, divid / maxlen, divid / maxlen});
-  glm_translate(nm2, (vec3){-xcen, -ycen, -zcen});
+  vec3 t = {divid / maxlen, divid / maxlen, divid / maxlen};
+  glm_scale(nm2, t);
+  vec3 cen = {-xcen, -ycen, -zcen};
+  glm_translate(nm2, cen);
 
   TransformMatrix res;
   mat4 ref = GLM_MAT4_IDENTITY_INIT;
@@ -36,7 +38,8 @@ TEST(MatrixTransformTest, SeriesOfTransformation) {
 
   res = res *
         TransformMatrixBuilder::CreateTranslationMatrix(trnsx, trnsy, trnsz);
-  glm_translate(ref, (vec3){trnsx, trnsy, trnsz});
+  vec3 trns = {trnsx, trnsy, trnsz};
+  glm_translate(ref, trns);
   for (int i = 0; i < 16; i++)
     EXPECT_EQ(res.data()[i], ((float*)ref)[i]) << "tr";
 
@@ -61,7 +64,8 @@ TEST(MatrixTransformTest, SeriesOfTransformation) {
     EXPECT_EQ(res.data()[i], ((float*)ref)[i]) << "uni";
 
   res = res * TransformMatrixBuilder::CreateScaleMatrix(scalex, scaley, scalez);
-  glm_scale(ref, (vec3){scalex, scaley, scalez});
+  vec3 scale = {scalex, scaley, scalez};
+  glm_scale(ref, scale);
   for (int i = 0; i < 16; i++)
     EXPECT_EQ(res.data()[i], ((float*)ref)[i]) << "scale";
 
