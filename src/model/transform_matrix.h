@@ -11,7 +11,7 @@ class TransformMatrix {  // column-major order
     return res;
   }
 
-  TransformMatrix operator*(TransformMatrix& m2) {
+  TransformMatrix operator*(const TransformMatrix& m2) {
     TransformMatrix res = ZeroMatrix();
     auto m1 = *this;
 
