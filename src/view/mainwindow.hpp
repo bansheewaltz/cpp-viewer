@@ -24,12 +24,34 @@ class MainWindow : public QMainWindow {
   ~MainWindow();
 
   void ShowSceneStats();
+  void UpdateRenderParams();
+  void UpdateSceneTransforms();
+  void ResetParameters();
 
  private slots:
   void OpenFile();
+  // Display parameters
+  void on_linesWidthSB_valueChanged(double t) { UpdateRenderParams(); }
+  void on_pointsSizeSB_valueChanged(double t) { UpdateRenderParams(); }
+  void on_linesChB_toggled(bool t) { UpdateRenderParams(); }
+  void on_pointsChB_toggled(bool t) { UpdateRenderParams(); }
+  void on_pointsCoB_currentIndexChanged(int t) { UpdateRenderParams(); }
+  void on_linesCoB_currentIndexChanged(int t) { UpdateRenderParams(); }
+  void on_resetPB_clicked() { ResetParameters(); }
+  // Scene transforms
+  void on_xTranslationSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_yTranslationSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_zTranslationSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_xRotationSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_yRotationSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_zRotationSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_xScaleSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_yScaleSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_zScaleSB_valueChanged(double t) { UpdateSceneTransforms(); }
+  void on_uScaleSB_valueChanged(double t) { UpdateSceneTransforms(); }
 
  private:
-  Ui::MainWindow *ui;
+  Ui::MainWindow *ui_;
   Facade facade_;
   RendererParamsDTO renderer_params_;
   SceneTransformsDTO scene_params_;
