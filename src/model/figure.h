@@ -62,7 +62,7 @@ class Figure : SceneObject {
  private:
   std::vector<unsigned> line_index_array_;
   TransformMatrix normalization_matrix_;
-  bool is_show_axes_ = true;
+  bool is_show_axes_ = false;
   FigureStatsDTO stats_;
   // internal representation
   std::vector<float> vertices_;

@@ -58,10 +58,10 @@ void QtSceneRenderer::paintGL() {
     drawAxes();
   }
   auto transform = view_rotate * scene_->transform_matrix();
-  // if (scene_->figures()[0].is_show_axes()) {
-  //   glLoadMatrixf(transform.data());
-  //   drawAxes();
-  // }
+  if (scene_->figure().is_show_axes()) {
+    glLoadMatrixf(transform.data());
+    drawAxes();
+  }
   transform = transform * scene_->normalization_matrix();
   glLoadMatrixf(transform.data());
 
