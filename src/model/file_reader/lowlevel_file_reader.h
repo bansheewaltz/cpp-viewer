@@ -22,6 +22,7 @@ class LowlevelFileReader : public FileReaderBase {
     figure.stats_.faces_cnt = m->face_count;
     figure.stats_.vertices_cnt = m->vertex_count;
     figure.stats_.edges_cnt = m->index_count;
+    figure.stats_.filepath = path;
 
     /* Break the index array of faces into the index array of UNIQUE lines */
     size_t unique_edges_cnt;
