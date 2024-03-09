@@ -2,7 +2,7 @@
 build
 CMakeLists.txt.*
 test_*.c
-DS_Store
+.DS_Store
 
 ### Template entries
 # Prerequisites
