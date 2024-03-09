@@ -50,13 +50,10 @@ void QtSceneRenderer::paintGL() {
 
   /* Set the model-view matrix */
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
   /* Perform all the transformations */
   auto view_rotate =
       TransformMatrixBuilder::CreateRotationMatrix(cam_rotx_, cam_roty_);
   if (params_.is_show_axes) {
-    // glRotatef(cam_rotx_, 1, 0, 0);
-    // glRotatef(cam_roty_, 0, 1, 0);
     glLoadMatrixf(view_rotate.data());
     drawAxes();
   }
@@ -65,7 +62,6 @@ void QtSceneRenderer::paintGL() {
   //   glLoadMatrixf(transform.data());
   //   drawAxes();
   // }
-  // multiply with the model's normalisation matrix
   transform = transform * scene_->normalization_matrix();
   glLoadMatrixf(transform.data());
 

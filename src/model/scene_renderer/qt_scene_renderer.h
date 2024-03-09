@@ -25,13 +25,9 @@ class QtSceneRenderer : public QOpenGLWidget,
   void resizeGL(int w, int h) override;
   void paintGL() override;
   /* Helpers */
-  void DrawScene(Scene *scene) override {
-    scene_ = scene;
-  }
+  void DrawScene(Scene *scene) override {scene_ = scene;}
   void drawFigure(Figure figure);
   void drawAxes();
-  // void drawCube(float, float, float, float);
-  // void drawCubeScene();
 
   /* Events */
   void mousePressEvent(QMouseEvent *) override;

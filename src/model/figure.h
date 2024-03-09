@@ -4,8 +4,6 @@
 #include <vector>
 
 #include "dtos.h"
-// #include "primitives.h"
-// #include "file_reader/lowlevel_file_reader.h"
 #include "scene_object.h"
 #include "transform_matrix.h"
 
