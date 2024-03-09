@@ -51,8 +51,8 @@ class Figure : SceneObject {
         0, 4, 1, 5, 2, 6, 3, 7   // side edges
     };
     figure.stats_.vertices_cnt = 8;
-    figure.stats_.faces_cnt = 8;
-    figure.stats_.edges_cnt = 24;
+    figure.stats_.faces_cnt = 6;
+    figure.stats_.edges_cnt = 12;
     figure.stats_.edges_unique_cnt = 12;
     figure.stats_.filepath = "internal example";
 
