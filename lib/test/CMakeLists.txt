@@ -2,9 +2,9 @@ set(TEST_EXE utests)
 
 file(GLOB TEST_SUITES CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/tests/*.cc)
 message(${TEST_SUITES})
-add_executable(${TEST_EXE} ${TEST_SUITES} ../file_reader/lowlevel_parser.c)
-add_subdirectory(third_party/fast_obj)
+add_executable(${TEST_EXE} ${TEST_SUITES} ../lowlevel_parser.c)
 
+# add_subdirectory(third_party/fast_obj)
 target_link_libraries(${TEST_EXE} GTest::gtest_main)
 target_include_directories(${TEST_EXE} PRIVATE ../ third_party/cglm/include/)
 target_compile_options(${TEST_EXE} PRIVATE -Wall -Wextra -Wno-deprecated-declarations -Wno-sign-compare)
@@ -41,8 +41,8 @@ find_program(GCOVR_COMMAND gcovr)
 
 if(GCOVR_COMMAND)
   set(COVERAGE_DIR ${PROJECT_BINARY_DIR}/coverage)
-  target_compile_options(${PROJECT_NAME} PUBLIC --coverage)
-  target_link_options(${PROJECT_NAME} PUBLIC --coverage)
+  target_compile_options(${TEST_EXE} PRIVATE --coverage)
+  target_link_options(${TEST_EXE} PRIVATE --coverage)
 
   # target_link_libraries(${PROJECT_NAME} INTERFACE gcov)
   add_custom_target(coverage
@@ -53,7 +53,8 @@ if(GCOVR_COMMAND)
     --html-self-contained
     --decisions
     --root=${PROJECT_SOURCE_DIR}/
-    --filter=${PROJECT_SOURCE_DIR}/src/model
+    --filter=${PROJECT_SOURCE_DIR}/lib
+    --exclude=${PROJECT_SOURCE_DIR}/lib/test
     --object-directory=${PROJECT_BINARY_DIR}
     COMMAND ${CMAKE_COMMAND}
     -E cmake_echo_color --cyan "Html coverage report can be found in ${COVERAGE_DIR}/report.html"

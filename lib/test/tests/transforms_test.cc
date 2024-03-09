@@ -1,10 +1,9 @@
 #include "cglm/cglm.h"
-#include "file_reader/processing.h"
 #include "gtest/gtest.h"
 #include "transform_matrix.h"
 #include "transform_matrix_builder.h"
 
-TEST(ParserTest, EmptyPath) {
+TEST(MatrixTransformTest, SeriesOfTransformation) {
   const float maxlen = 2;
   const float divid = 2;
   const float xcen = 1, ycen = 2, zcen = 3;

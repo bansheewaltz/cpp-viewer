@@ -44,13 +44,6 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     WIN32_EXECUTABLE ON
 )
 
-if(BUILD_TESTS)
-    include(${CMAKE_SOURCE_DIR}/cmake/updateSubmodules.cmake)
-    add_subdirectory(model/test/third_party/gtest)
-    include(CTest)
-    add_subdirectory(model/test)
-endif()
-
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -4,9 +4,12 @@ BUILD_DIR   ?= $(BIN_DIR)/$(BUILD_TYPE)
 INSTALL_DIR ?= installation
 
 all:
-	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON
-	cmake --build $(BUILD_DIR) --parallel -- --output-sync
-	cmake --build $(BUILD_DIR) --target check coverage
+	cmake -B build/Debug -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON -DDONTBUILD_APP=1
+	cmake --build build/Debug --parallel -- --output-sync
+	cmake --build build/Debug --target check coverage
+	cmake -B build/Release -DCMAKE_BUILD_TYPE=Release
+	cmake --build build/Release --parallel -- --output-sync
+	cmake --install build/Release --prefix $(INSTALL_DIR)
 .PHONY: all
 
 configure:

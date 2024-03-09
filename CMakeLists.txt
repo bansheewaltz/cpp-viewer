@@ -19,7 +19,16 @@ set(CMAKE_C_EXTENSIONS OFF)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(cmake/updateSubmodules.cmake)
 
-add_subdirectory(src)
+if(NOT DONTBUILD_APP)
+  add_subdirectory(src)
+endif()
+
+if(BUILD_TESTS)
+  include(${CMAKE_SOURCE_DIR}/cmake/updateSubmodules.cmake)
+  add_subdirectory(lib/test/third_party/gtest)
+  include(CTest)
+  add_subdirectory(lib/test)
+endif()
 
 # Target uninstall
 if(NOT TARGET uninstall)
