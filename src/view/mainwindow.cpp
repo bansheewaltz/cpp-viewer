@@ -11,6 +11,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui_(new Ui::MainWindow) {
   ui_->setupUi(this);
+  ui_->centralwidget->setFocus();
   facade_.SetSceneRenderer(ui_->viewport);
   UpdateSceneTransforms();
   UpdateRenderParams();
