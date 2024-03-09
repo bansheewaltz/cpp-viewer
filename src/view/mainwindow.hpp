@@ -23,7 +23,9 @@ class MainWindow : public QMainWindow {
   MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
 
-  void ShowFileStats();
+  void ShowSceneStats();
+
+ private slots:
   void OpenFile();
 
  private:

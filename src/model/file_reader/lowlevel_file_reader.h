@@ -44,7 +44,7 @@ class LowlevelFileReader : public FileReaderBase {
         -mb.xcen, -mb.ycen, -mb.zcen);
     figure.normalization_matrix_ = scale_norm * translation_norm;
 
-    // as we have only one figure in scene for now
+    // as we have only one figure in a scene for now
     scene_.ReplaceFigure(figure);
     scene_.set_normalization_matrix(figure.normalization_matrix_);
 

@@ -6,17 +6,26 @@
 #include <QShortcut>
 
 #include "./ui_mainwindow.h"
+#include "file_reader/lowlevel_file_reader.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+
+  new QShortcut(QKeySequence("Ctrl+O"), this, SLOT(OpenFile()));
+
+  facade_.SetSceneRenderer(ui->viewport);
+  facade_.SetFileReader(new LowlevelFileReader);
+  facade_.CreateDefaultScene();
+  // facade_.DrawScene();
+  // ShowFileStats();
 }
 
 MainWindow::~MainWindow() {
   delete ui;
 }
 
-void MainWindow::ShowFileStats() {
+void MainWindow::ShowSceneStats() {
   auto scene_stats = facade_.scene_stats();
   QString stats =                                                     //
       filepath_.section("/", -1, -1).section(".", 0, 0) + " | " +     //
@@ -36,5 +45,5 @@ void MainWindow::OpenFile() {
 
   filepath_ = filepath;
   facade_.LoadScene(filepath_.toStdString());
-  ShowFileStats();
+  ShowSceneStats();
 }

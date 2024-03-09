@@ -35,6 +35,7 @@ void QtSceneRenderer::paintGL() {
   glClearColor(bc.red_f(), bc.green_f(), bc.blue_f(), bc.alpha_f());
   /* Clear the buffers */
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
   /* Set the projection matrix */
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -59,14 +60,14 @@ void QtSceneRenderer::paintGL() {
     glLoadMatrixf(view_rotate.data());
     drawAxes();
   }
-  // auto transform = view_rotate * scene_->transform_matrix();
+  auto transform = view_rotate * scene_->transform_matrix();
   // if (scene_->figures()[0].is_show_axes()) {
   //   glLoadMatrixf(transform.data());
   //   drawAxes();
   // }
-  // transform = transform * scene_->normalization_matrix();
   // multiply with the model's normalisation matrix
-  // glLoadMatrixf(transform.data());
+  transform = transform * scene_->normalization_matrix();
+  glLoadMatrixf(transform.data());
 
   drawFigure(scene_->figure());
 }

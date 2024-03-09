@@ -27,7 +27,6 @@ class QtSceneRenderer : public QOpenGLWidget,
   /* Helpers */
   void DrawScene(Scene *scene) override {
     scene_ = scene;
-    paintGL();
   }
   void drawFigure(Figure figure);
   void drawAxes();

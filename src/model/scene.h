@@ -8,11 +8,16 @@
 
 class Scene {
  public:
+  static Scene CreateDefaultScene() {
+    Scene scene;
+    scene.AddFigure(Figure::CreateCube(0, 0, 0, 0.5));
+    return scene;
+  }
   Figure figure() const { return figures_[0]; }
   std::vector<Figure> figures() const { return figures_; }
   TransformMatrix transform_matrix() const { return transform_matrix_; }
   TransformMatrix normalization_matrix() const { return normalization_matrix_; }
-  FigureStatsDTO stats() { return figures_[0].stats(); }
+  FigureStatsDTO stats() { return figure().stats(); }
   void set_normalization_matrix(TransformMatrix norm) {
     normalization_matrix_ = norm;
   }
