@@ -27,7 +27,7 @@ struct RendererParamsDTO {
 struct SceneTransformsDTO {
   float rotx, roty, rotz;
   float trnsx, trnsy, trnsz;
-  float scalex, scaley, scalez, scaleu;
+  float scalex = 1, scaley = 1, scalez = 1, scaleu = 1;
 };
 
 struct FigureStatsDTO {
