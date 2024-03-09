@@ -12,10 +12,6 @@ file(GLOB sources CONFIGURE_DEPENDS
     "controller/*.*"
 )
 
-if(ENABLE_TESTING)
-    add_subdirectory(model/test)
-endif()
-
 add_subdirectory(view/third_party/gifimage)
 
 set(project_sources
@@ -47,6 +43,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE ON
     WIN32_EXECUTABLE ON
 )
+
+if(BUILD_TESTS)
+    include(${CMAKE_SOURCE_DIR}/cmake/updateSubmodules.cmake)
+    add_subdirectory(model/test/third_party/gtest)
+    include(CTest)
+    add_subdirectory(model/test)
+endif()
 
 install(TARGETS ${PROJECT_NAME}
     BUNDLE DESTINATION .

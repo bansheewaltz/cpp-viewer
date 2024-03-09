@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.21.1)
 
 project(3dviewer VERSION 2.0 LANGUAGES C CXX)
 
-option(ENABLE_DOCS "Build documenation" OFF)
-option(ENABLE_TESTING "Enable testing" OFF)
-option(ENABLE_COVERAGE "Enable code coverage" OFF)
+option(BUILD_DOCS "Build documenation" OFF)
+option(BUILD_TESTS "Build tests" OFF)
+option(BUILD_COVERAGE "Build code coverage" OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
