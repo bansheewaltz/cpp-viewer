@@ -3,7 +3,10 @@ BUILD_TYPE  ?= Debug
 BUILD_DIR   ?= $(BIN_DIR)/$(BUILD_TYPE)
 INSTALL_DIR ?= installation
 
-all: configure build test gcov_report install
+all:
+	cmake -B $(BUILD_DIR) -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DBUILD_TESTS=ON -DBUILD_COVERAGE=ON
+	cmake --build $(BUILD_DIR) --parallel -- --output-sync
+	cmake --build $(BUILD_DIR) --target check coverage
 .PHONY: all
 
 configure:
@@ -57,7 +60,7 @@ bdist: build
 .PHONY: bdist
 
 test: configure
-	cmake --build $(BUILD_DIR) --target run_tests
+	cmake --build $(BUILD_DIR) --target check
 .PHONY: test
 
 gcov_report: configure
