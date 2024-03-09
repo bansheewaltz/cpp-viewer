@@ -13,19 +13,6 @@ QtSceneRenderer::QtSceneRenderer(QWidget *parent) : QOpenGLWidget(parent) {
 }
 QtSceneRenderer::~QtSceneRenderer() {}
 
-// void printMatrix(float *m, bool native) {
-//   if (native)
-//     qDebug() << "native";
-//   else
-//     qDebug() << "custom";
-
-//   qDebug() << "address:" << &(m[0]);
-//   for (int i = 0; i < 16; i += 4)
-//     qDebug() << m[i] << m[i + 1] << m[i + 2] << m[i + 3];
-
-//   qDebug() << "";
-// }
-
 /* Set up the rendering context, load shaders and other resources, etc. */
 void QtSceneRenderer::initializeGL() {
   /* Retrieve OpenGL functions from graphics card's drivers */

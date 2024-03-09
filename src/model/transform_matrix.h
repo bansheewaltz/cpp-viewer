@@ -1,10 +1,18 @@
 #ifndef TRANSFORM_MATRIX_H_
 #define TRANSFORM_MATRIX_H_
 
-class TransformMatrix {
+#include <iostream>
+
+class TransformMatrix {  // column-major order
  public:
-  TransformMatrix operator*(const TransformMatrix& m2) {
+  static TransformMatrix ZeroMatrix() {
     TransformMatrix res;
+    for (int i = 0; i < 16; i++) (*res.data_)[i] = 0;
+    return res;
+  }
+
+  TransformMatrix operator*(TransformMatrix& m2) {
+    TransformMatrix res = ZeroMatrix();
     auto m1 = *this;
 
     for (int i = 0; i < 4; i++)
@@ -15,6 +23,13 @@ class TransformMatrix {
     return res;
   }
 
+  friend std::ostream& operator<<(std::ostream& os, TransformMatrix const& m) {
+    for (int i = 0; i < 16; i++) os << (*m.data_)[i] << " \n"[(i + 1) % 4 == 0];
+    os << std::endl;
+    return os;
+  }
+
+  const float* operator[](int row) const { return data_[row]; }
   float* operator[](int row) { return data_[row]; }
   float* data() { return (float*)data_; }
 

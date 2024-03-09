@@ -5,7 +5,7 @@
 
 #include "transform_matrix.h"
 
-struct TransformMatrixBuilder {
+struct TransformMatrixBuilder {  // column-major order
   static TransformMatrix CreateRotationMatrix(float x, float y, float z = 0) {
     TransformMatrix matx;
     float cosx = cosf(to_rad(x));
