@@ -113,8 +113,6 @@ void QtSceneRenderer::drawAxes() {
       0,    0,    fmin,  // -z
       0,    0,    fmax,  // +z
   };
-  static unsigned int index_count = 6;
-  static unsigned int indices[] = {0, 1, 2, 3, 4, 5};
 
   glVertexPointer(3, GL_FLOAT, 0, positions);
   glLineWidth(1);
