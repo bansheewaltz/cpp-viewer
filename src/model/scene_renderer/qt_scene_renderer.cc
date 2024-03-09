@@ -44,7 +44,7 @@ void QtSceneRenderer::paintGL() {
     glTranslatef(0, 0, -2 * ar_);
   } else {
     static const float c = sqrt(3);  // because of the view cube with side 2
-    glOrtho(-c * ar_, c * ar_, -c, c, -c, c);
+    glOrtho(-c * ar_, c * ar_, -c, c, -10, 10);
   }
 
   /* Set the model-view matrix */
