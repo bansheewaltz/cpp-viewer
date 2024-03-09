@@ -92,7 +92,7 @@ void QtSceneRenderer::drawFigure(Figure figure) {
     if (params_.point_style == RendererParamsDTO::PointStyle::CIRCLE) {
       glEnable(GL_POINT_SMOOTH);
     }
-    GLCall(glDrawArrays(GL_POINTS, 0, figure.vertices().size() / 3));
+    GLCall(glDrawArrays(GL_POINTS, 1, (figure.vertices().size() - 1) / 3));
     glDisable(GL_POINT_SMOOTH);
   }
 }

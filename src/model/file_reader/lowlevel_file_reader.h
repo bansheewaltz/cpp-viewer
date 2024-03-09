@@ -20,7 +20,7 @@ class LowlevelFileReader : public FileReaderBase {
     figure.indices_ = std::vector(m->indices, m->indices + m->index_count);
 
     figure.stats_.faces_cnt = m->face_count;
-    figure.stats_.vertices_cnt = m->vertex_count;
+    figure.stats_.vertices_cnt = m->vertex_count - 1;
     figure.stats_.edges_cnt = m->index_count;
     figure.stats_.filepath = path;
 
@@ -28,12 +28,6 @@ class LowlevelFileReader : public FileReaderBase {
     size_t unique_edges_cnt;
     auto uliarr = owv_iarr_to_unique_lines(m, &unique_edges_cnt);
     figure.line_index_array_ = std::vector(uliarr, uliarr + unique_edges_cnt);
-
-    /* Break the index array of faces into the array of index arrays by faces */
-    //  owv_index_arr_to_2d_arr(m);
-    /* Break the index array of faces into the index array of lines */
-    //  this->index_array = owv_to_lines_index_arr(m);
-    //  this->index_count = m->index_count * 2;
 
     /* Create a normalization matrix for the model */
     auto mb = owv_mesh_find_bounds(m);
