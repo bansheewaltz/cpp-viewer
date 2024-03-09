@@ -1,5 +1,5 @@
-#ifndef LOWLEVEL_FILE_READER_BASE_H_
-#define LOWLEVEL_FILE_READER_BASE_H_
+#ifndef LOWLEVEL_FILE_READER_H_
+#define LOWLEVEL_FILE_READER_H_
 
 #include "file_reader_base.h"
 #include "lowlevel_parser.h"
@@ -56,4 +56,4 @@ class LowlevelFileReader : public FileReaderBase {
   Scene scene_;
 };
 
-#endif  // LOWLEVEL_FILE_READER_BASE_H_
+#endif  // LOWLEVEL_FILE_READER_H_
