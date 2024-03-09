@@ -75,7 +75,7 @@ void QtSceneRenderer::drawFigure(Figure figure) {
   /* Set up the buffers */
   glVertexPointer(3, GL_FLOAT, 0, figure.vertices().data());
   /* Draw lines */
-  if (true) {
+  if (params_.is_show_lines) {
     Color lc = params_.line_color;
     glColor3d(lc.red_f(), lc.green_f(), lc.blue_f());
     glLineWidth(params_.line_width);
