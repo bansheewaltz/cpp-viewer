@@ -18,7 +18,10 @@ class Scene {
   }
 
   void AddFigure(Figure figure) { figures_.push_back(figure); }
-  void ReplaceFigure(Figure figure) { figures_[figures_.size() - 1] = figure; }
+  void ReplaceFigure(Figure figure) {
+    if (!figures_.empty()) figures_.pop_back();
+    figures_.push_back(figure);
+  }
   void TransformScene(const SceneTransformsDTO transforms) {
     auto &t = transforms;
     auto translation_m = TransformMatrixBuilder::CreateTranslationMatrix(
